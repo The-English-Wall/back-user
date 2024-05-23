@@ -5,7 +5,6 @@ import { UserServices } from './users_service.js';
 import { catchAsync } from '../../errors/index.js';
 import { AppError } from '../../errors/index.js';
 
-
 const userService = new UserServices()
 
 export const protect = catchAsync(async (req, res, next) => {
