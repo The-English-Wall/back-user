@@ -22,10 +22,9 @@ router.post("/register", register)
 
 router.route('/')
       .get(findAllUsers)
+
 router.route('/:id')
       .get(findOneUser)
-
-router.use(protect)
 
 router
       .route('/:id')

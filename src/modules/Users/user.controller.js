@@ -13,15 +13,15 @@ import { ERROR_MESSAGES } from '../../common/utils/messageHanddle.js';
 const userService = new UserServices();
 
 export const findAllUsers = catchAsync(async (req, res, next) => {
-  const user = userService.findAllUser()
+  const user = await userService.findAllUser()
 
-  res.status(200).josn(user)
+  res.status(200).json(user)
 })
 
 export const findOneUser = catchAsync(async (req, res, next) => {
   const { id } = req.params;
 
-  const user = userService.findOneById(id)
+  const user = await userService.findOneById(id)
 
   if (!user) {
     next(new AppError(`User whit id ${id} not found`, 404))
