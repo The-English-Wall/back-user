@@ -3,7 +3,9 @@ import {
       login,
       deleteUser,
       updateUser,
-      register
+      register,
+      findAllUsers,
+      findOneUser
 } from './user.controller.js';
 
 import {
@@ -17,6 +19,11 @@ export const router = express.Router()
 router.post("/login", login)
 
 router.post("/register", register)
+
+router.route('/')
+      .get(findAllUsers)
+router.route('/:id')
+      .get(findOneUser)
 
 router.use(protect)
 

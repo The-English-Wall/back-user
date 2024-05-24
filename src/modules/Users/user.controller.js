@@ -8,6 +8,7 @@ import { UserServices } from './users_service.js';
 import generateJWT from '../../config/plugins/generate-JWT.js';
 import { verifyPassword } from '../../config/plugins/encrypted-password.js';
 import { BASE_URL_COMPANY } from '../../config/conections/axios.config.js';
+import { ERROR_MESSAGES } from '../../common/utils/messageHanddle.js';
 
 const userService = new UserServices();
 
@@ -66,6 +67,7 @@ export const login = catchAsync(async (req, res, next) => {
 
 export const register = catchAsync(async (req, res, next) => {
   const { hasError, errorMessages, userData } = validateRegister(req.body);
+
   if (hasError) {
     return res.status(422).json({
       status: 'error',
@@ -73,16 +75,20 @@ export const register = catchAsync(async (req, res, next) => {
     });
   }
 
+  try {
+    const { data } = await BASE_URL_COMPANY.get(`/company/${userData.companyId}`)
+    let userListPayload = data.userList === null ? [] : data.userList
+
+    userListPayload.push(userData)
+
+    await BASE_URL_COMPANY.patch(`/company/${userData.companyId}`, { userList: userListPayload })
+  } catch (error) {
+    next(new AppError(ERROR_MESSAGES.error_user_register, 422))
+  }
+
   const user = await userService.createUser(userData);
 
   const token = await generateJWT(user.id);
-
-  const { data } = await BASE_URL_COMPANY.get(`/company/${userData.companyId}`)
-  let userListPayload = data.userList === null ? [] : data.userList
-
-  userListPayload.push(userData)
-
-  await BASE_URL_COMPANY.patch(`/company/${userData.companyId}`, { userList: userListPayload })
 
   return res.status(201).json({
     token,
