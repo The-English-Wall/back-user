@@ -11,6 +11,24 @@ import { BASE_URL_COMPANY } from '../../config/conections/axios.config.js';
 
 const userService = new UserServices();
 
+export const findAllUsers = catchAsync(async (req, res, next) => {
+  const user = userService.findAllUser()
+
+  res.status(200).josn(user)
+})
+
+export const findOneUser = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+
+  const user = userService.findOneById(id)
+
+  if (!user) {
+    next(new AppError(`User whit id ${id} not found`, 404))
+  }
+
+  res.status(200).json(user)
+})
+
 export const login = catchAsync(async (req, res, next) => {
   const { hasError, errorMessages, userData } = validateLogin(req.body);
   if (hasError) {

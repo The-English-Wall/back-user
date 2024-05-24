@@ -15,6 +15,14 @@ export class UserServices {
         })
     }
 
+    async findAllUser() {
+        return await User.findAll({
+            where: {
+                status: true
+            }
+        })
+    }
+
     async updateUser(user, data) {
         return await user.update(data)
     }
