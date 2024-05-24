@@ -60,7 +60,9 @@ export const login = catchAsync(async (req, res, next) => {
     token,
     user: {
       name: user.name,
-      email: user.email
+      email: user.email,
+      role: user.role,
+      image: user.image
     },
   });
 });
@@ -95,6 +97,7 @@ export const register = catchAsync(async (req, res, next) => {
     user: {
       name: user.name,
       email: user.email,
+      role: user.role
     },
   });
 });

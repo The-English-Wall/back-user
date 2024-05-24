@@ -25,10 +25,15 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       unique: false,
     },
+    image: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
+    },
     role: {
-      type: DataTypes.ENUM("normal", "admin"),
+      type: DataTypes.ENUM("user", "admin", "superadmin"),
       allowNull: false,
-      defaultValue: "normal"
+      defaultValue: "user"
     },
     status: {
       type: DataTypes.BOOLEAN,
