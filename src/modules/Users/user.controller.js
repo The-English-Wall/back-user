@@ -25,6 +25,8 @@ export const findOneUser = catchAsync(async (req, res, next) => {
   if (!user) {
     next(new AppError(`User whit id ${id} not found`, 404))
   }
+
+  res.status(200).json(user)
 })
 
 export const login = catchAsync(async (req, res, next) => {
