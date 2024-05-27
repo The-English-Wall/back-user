@@ -8,7 +8,8 @@ import { UserServices } from './users_service.js';
 import generateJWT from '../../config/plugins/generate-JWT.js';
 import { verifyPassword } from '../../config/plugins/encrypted-password.js';
 import { BASE_URL_COMPANY } from '../../config/conections/axios.config.js';
-import { ERROR_MESSAGES } from '../../common/utils/messageHanddle.js';
+import { ERROR_MESSAGES } from '../../common/utils/ErrorMessagesHanddle.js';
+import { SUCCESS_MESSAGES } from '../../common/utils/succesMessages.js';
 
 const userService = new UserServices();
 
@@ -24,7 +25,7 @@ export const findOneUser = catchAsync(async (req, res, next) => {
   const user = await userService.findOneById(id)
 
   if (!user) {
-    next(new AppError(`User whit id ${id} not found`, 404))
+    next(new AppError(ERROR_MESSAGES.error_user_not_found, 404))
   }
 
   res.status(200).json(user)
@@ -42,7 +43,7 @@ export const login = catchAsync(async (req, res, next) => {
   const user = await userService.findUserByEmail(userData.email);
 
   if (!user) {
-    return next(new AppError('This user does not exist', 404));
+    return next(new AppError(ERROR_MESSAGES.error_user_not_exist, 404));
   }
 
   const isCorrectPassword = await verifyPassword(
@@ -51,7 +52,7 @@ export const login = catchAsync(async (req, res, next) => {
   );
 
   if (!isCorrectPassword) {
-    return next(new AppError('incorrect Email or Password', 401));
+    return next(new AppError(ERROR_MESSAGES.error_user_icorrect_information, 401));
   }
 
   const token = await generateJWT(user.id);
@@ -116,7 +117,7 @@ export const updateUser = catchAsync(async (req, res, next) => {
 
   const updatedUser = await userService.updateUser(user, userData);
 
-  return res.status(200).json(updatedUser);
+  return res.status(200).json(SUCCESS_MESSAGES.success_message_updated, updatedUser);
 });
 
 export const deleteUser = catchAsync(async (req, res, next) => {
@@ -125,12 +126,12 @@ export const deleteUser = catchAsync(async (req, res, next) => {
   const user = await userService.findOneById(id)
 
   if (!user) {
-    return next(new AppError('This user does not exist', 404));
+    return next(new AppError(ERROR_MESSAGES.error_user_not_exist, 404));
   }
 
   await userService.deleteUser(user);
 
-  return res.status(200).json();
+  return res.status(200).json(SUCCESS_MESSAGES.succes_message_deleted);
 });
 
 
