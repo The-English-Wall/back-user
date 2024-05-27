@@ -6,6 +6,7 @@ const registerUserSchema = z.object({
     name: z.string().min(3).max(20),
     email: z.string().email({ message: "invalid email" }),
     password: z.string().min(8),
+    image: z.string().optional(),
     companyId: z.number().positive()
 })
 
@@ -17,6 +18,8 @@ const loginUserSchema = z.object({
 const updateUserSchema = z.object({
     email: z.string().email({ message: "invalid email" }),
     name: z.string().min(3).max(20),
+    password: z.string().min(8),
+    image: z.string().optional()
 })
 
 export const validateRegister = (data) => {
@@ -52,7 +55,7 @@ export const validateLogin = (data) => {
     }
 }
 export const validateUpdate = (data) => {
-    const result = updateUserSchema.safeParse(data)
+    const result = updateUserSchema.partial().safeParse(data)
 
     const {
         hasError,
