@@ -7,7 +7,11 @@ const registerUserSchema = z.object({
     email: z.string().email({ message: "invalid email" }),
     password: z.string().min(8),
     image: z.string().optional(),
-    companyId: z.number().positive()
+    companyId: z.number().positive(),
+    organizationName: z.string().optional(),
+    organizationTaxId: z.string().optional(),
+    organizationId: z.number().positive().optional(),
+    userType: z.string().optional(),
 })
 
 const loginUserSchema = z.object({

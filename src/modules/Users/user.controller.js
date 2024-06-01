@@ -7,7 +7,7 @@ import {
 import { UserServices } from './users_service.js';
 import generateJWT from '../../config/plugins/generate-JWT.js';
 import { verifyPassword } from '../../config/plugins/encrypted-password.js';
-import { BASE_URL_COMPANY } from '../../config/conections/axios.config.js';
+import { BASE_URL_COMPANY, BASE_URL_SUPPLIER } from '../../config/conections/axios.config.js';
 import { ERROR_MESSAGES } from '../../common/utils/ErrorMessagesHanddle.js';
 import { SUCCESS_MESSAGES } from '../../common/utils/succesMessages.js';
 
@@ -70,7 +70,7 @@ export const login = catchAsync(async (req, res, next) => {
 
 export const register = catchAsync(async (req, res, next) => {
   const { hasError, errorMessages, userData } = validateRegister(req.body);
-
+  
   if (hasError) {
     return res.status(422).json({
       status: 'error',
@@ -78,15 +78,28 @@ export const register = catchAsync(async (req, res, next) => {
     });
   }
 
-  try {
-    const { data } = await BASE_URL_COMPANY.get(`/company/${userData.companyId}`)
-    let userListPayload = data.userList === null ? [] : data.userList
 
-    userListPayload.push(userData)
+  // if(userData.userType === "customer") {
+  //   try {
+  //     const { data } = await BASE_URL_SUPPLIER.get(`/supplier/${userData.organizationId}`)
+  //     console.log('data: ', data)
+  //     await BASE_URL_SUPPLIER.patch(`/supplier/${userData.organizationId}`, {userId})
+  //   } catch (error) {
+      
+  //   }
+  // }
 
-    await BASE_URL_COMPANY.patch(`/company/${userData.companyId}`, { userList: userListPayload })
-  } catch (error) {
-    next(new AppError(ERROR_MESSAGES.error_user_register, 422))
+  if(userData.userType === "employee") {
+    try {
+      const { data } = await BASE_URL_COMPANY.get(`/company/${userData.companyId}`)
+      let userListPayload = data.userList === null ? [] : data.userList
+  
+      userListPayload.push(userData)
+  
+      await BASE_URL_COMPANY.patch(`/company/${userData.companyId}`, { userList: userListPayload })
+    } catch (error) {
+      next(new AppError(ERROR_MESSAGES.error_user_register, 422))
+    }
   }
 
   const user = await userService.createUser(userData);
@@ -98,7 +111,8 @@ export const register = catchAsync(async (req, res, next) => {
     user: {
       name: user.name,
       email: user.email,
-      role: user.role
+      role: user.role,
+      userType: user.userType
     },
   });
 });
