@@ -63,7 +63,12 @@ export const login = catchAsync(async (req, res, next) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      image: user.image
+      image: user.image,
+      userType: user.userType,
+      companyId: user.companyId,
+      organizationName: user.organizationName,
+      organizationTaxId: user.organizationTaxId,
+      organizationId: user.organizationId
     },
   });
 });
@@ -112,7 +117,11 @@ export const register = catchAsync(async (req, res, next) => {
       name: user.name,
       email: user.email,
       role: user.role,
-      userType: user.userType
+      userType: user.userType,
+      companyId: user.companyId,
+      organizationName: user.organizationName,
+      organizationTaxId: user.organizationTaxId,
+      organizationId: user.organizationId
     },
   });
 });
