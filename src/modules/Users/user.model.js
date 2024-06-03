@@ -15,6 +15,22 @@ const User = sequelize.define(
       allowNull: false,
       type: DataTypes.STRING,
     },
+    organizationName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    organizationTaxId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    organizationId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+    },
+    companyId: {
+      type: DataTypes.INTEGER,
+      allowNull: true
+    },
     email: {
       allowNull: false,
       type: DataTypes.STRING,
@@ -29,6 +45,9 @@ const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true,
       defaultValue: 'https://t3.ftcdn.net/jpg/05/16/27/58/360_F_516275801_f3Fsp17x6HQK0xQgDQEELoTuERO4SsWV.jpg'
+    },
+    userType: {
+      type: DataTypes.ENUM("employee", "customer", "supplier"),
     },
     role: {
       type: DataTypes.ENUM("user", "admin", "superadmin"),
