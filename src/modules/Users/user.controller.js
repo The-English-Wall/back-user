@@ -10,6 +10,7 @@ import { verifyPassword } from '../../config/plugins/encrypted-password.js';
 import { BASE_URL_COMPANY } from '../../config/conections/axios.config.js';
 import { ERROR_MESSAGES } from '../../common/utils/ErrorMessagesHanddle.js';
 import { SUCCESS_MESSAGES } from '../../common/utils/succesMessages.js';
+import { uploadImage } from '../../common/utils/cloudinary.js';
 
 const userService = new UserServices();
 
@@ -113,12 +114,30 @@ export const updateUser = catchAsync(async (req, res, next) => {
     });
   }
 
-  const { user } = req;
+  const { id } = req.params;
+
+  const user = await userService.findOneById(id)
+
+  if (!user) {
+    return next(new AppError(ERROR_MESSAGES.error_user_not_found, 404))
+  }
 
   const updatedUser = await userService.updateUser(user, userData);
 
-  return res.status(200).json(SUCCESS_MESSAGES.success_message_updated, updatedUser);
+  return res.status(200).json(updatedUser);
 });
+
+export const Test = catchAsync(async (req, res, next) => {
+  const { tempFilePath } = req.files.image;
+
+  console.log(tempFilePath)
+
+  const imageUrl = await uploadImage(tempFilePath, '3')
+
+  console.log(imageUrl)
+
+  return res.status(200).json({ message: imageUrl })
+})
 
 export const deleteUser = catchAsync(async (req, res, next) => {
   const { id } = req.params

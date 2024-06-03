@@ -13,5 +13,8 @@ export const envs = {
     DB_PORT: env.get("DB_PORT").required().asString(),
     SECRET_JWD_SEED: env.get("SECRET_JWD_SEED").required().asString(),
     JWT_EXPIRE_IN: env.get("JWT_EXPIRE_IN").required().asString(),
-    PORT_COMPANY: env.get("PORT_COMPANY").required().asString()
+    PORT_COMPANY: env.get("PORT_COMPANY").required().asString(),
+    CLOUDINARY_NAME_PROCURE: env.get("CLOUDINARY_NAME_PROCURE").required().asString(),
+    CLOUDINARY_API_KEY_PROCURE: env.get("CLOUDINARY_API_KEY_PROCURE").required().asString(),
+    CLOUDINARY_API_SECRET_PROCURE: env.get("CLOUDINARY_API_SECRET_PROCURE").required().asString(),
 }
